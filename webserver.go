@@ -11,7 +11,9 @@ func main() {
 	db := database{"shoes": 50, "socks": 5}
 	http.HandleFunc("/list", db.list)
 	http.HandleFunc("/price", db.price)
+	http.HandleFunc("/add", db.add)
 	http.HandleFunc("/update", db.update)
+	http.HandleFunc("/delete", db.delete)
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
@@ -37,15 +39,38 @@ func (db database) price(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func (db database) delete(w http.ResponseWriter, req *http.Request) {
+	item := req.URL.Query().Get("item")
+	delete(db, item)
+	for item, price := range db {
+		fmt.Fprintf(w, "%s: %s\n", item, price)
+	}
+}
+
 func (db database) update(w http.ResponseWriter, req *http.Request) {
 	item := req.URL.Query().Get("item")
-	newprice := req.URL.Query().Get("newprice")
-	if item, ok := db[item]; ok {
-		db[price] = strconv.Atoi(newprice)
-		fmt.Fprintf(w, "%s: %s\n", item, price)
-	} else {
-		w.WriteHeader(http.StatusNotFound) // 404
-		fmt.Fprintf(w, "no such item: %q\n", item)
+	price := req.URL.Query().Get("price")
+	value, err := strconv.ParseFloat(price, 32)
+	if err != nil {
 	}
+	var temp float32
+	temp = float32(value)
+	db[item] = dollars(temp)
+	for item, price := range db {
+		fmt.Fprintf(w, "%s: %s\n", item, price)
+	}
+}
 
+func (db database) add(w http.ResponseWriter, req *http.Request) {
+	item := req.URL.Query().Get("item")
+	price := req.URL.Query().Get("price")
+	value, err := strconv.ParseFloat(price, 32)
+	if err != nil {
+	}
+	var temp float32
+	temp = float32(value)
+	db[item] = dollars(temp)
+	for item, price := range db {
+		fmt.Fprintf(w, "%s: %s\n", item, price)
+	}
 }
