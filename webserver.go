@@ -11,7 +11,7 @@ func main() {
 	db := database{"shoes": 50, "socks": 5}
 	http.HandleFunc("/list", db.list)
 	http.HandleFunc("/price", db.price)
-	http.HandleFunc("/add", db.add)
+	http.HandleFunc("/create", db.create)
 	http.HandleFunc("/update", db.update)
 	http.HandleFunc("/delete", db.delete)
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
@@ -61,7 +61,7 @@ func (db database) update(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func (db database) add(w http.ResponseWriter, req *http.Request) {
+func (db database) create(w http.ResponseWriter, req *http.Request) {
 	item := req.URL.Query().Get("item")
 	price := req.URL.Query().Get("price")
 	value, err := strconv.ParseFloat(price, 32)
