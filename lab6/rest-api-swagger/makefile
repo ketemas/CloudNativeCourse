@@ -9,6 +9,7 @@ DIR_OUT:=/tmp
 build:
 	$(GO) build -o bin/http-go-server internal/main.go
 :
+
 #-------------------------
 # Target: swagger.validate
 #-------------------------
@@ -16,6 +17,7 @@ build:
 
 swagger.validate:
 	swagger validate pkg/swagger/swagger.yml
+
 #-------------------------
 # Code generation
 #-------------------------
@@ -23,5 +25,5 @@ swagger.validate:
 
 ## Generate go code
 generate:
-	@echo "==> generating go code" 
+	@echo "==> generating go code"
 	GOFLAGS=-mod=vendor $(GO) generate $(pkgs)
