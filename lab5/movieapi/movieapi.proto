@@ -1,28 +1,18 @@
 // Proto file for movie info service. Note this is gRPC proto syntax (not Go)
 syntax = "proto3";
 
-option go_package = "labs/lab5/movieapi";
+option go_package = "lab5/lab5/movieapi";
 
 package movieapi;
 
 service MovieInfo {
-	// Sends a request for movie info
+	// Sends a requeest for movie info
 	rpc GetMovieInfo (MovieRequest) returns (MovieReply) {}
-	// Sends a request to set movie info
-	rpc SetMovieInfo (MovieData) returns (Status) {}
 }
 
 // The request message containing movie name
 message MovieRequest {
 	string title = 1;
-}
-
-// The response message containining movie data
-message MovieData {
-	string title = 1;
-	int32 year = 2;
-	string director = 3;
-	repeated string cast = 4;
 }
 
 // The response message containining movie info
@@ -33,7 +23,3 @@ message MovieReply {
 	
 }
 
-// The request message containing status code
-message Status {
-	string code = 1;
-}
