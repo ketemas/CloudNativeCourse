@@ -8,9 +8,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ketemas/CloudNativeCourse/tree/main/lab5/movieapi"
+	"lab6/lab5/movieapi"
 	"google.golang.org/grpc"
 )
+
 
 const (
 	port = ":50051"
@@ -43,6 +44,21 @@ func (s *server) GetMovieInfo(ctx context.Context, in *movieapi.MovieRequest) (*
 
 	}
 
+	return reply, nil
+
+}
+
+func (s *server) SetMovieInfo(ctx context.Context, in *movieapi.MessageData) (*movieapi.Status, error) {
+	title := in.GetTitle()
+	year := in.GetYear()
+	Year := strconv.FormatInt(int64(year), 10)
+	director := in.GetDirector()
+	cast := strings.Join(in.GetCast(), ",")
+	details := make([]string, 0)
+	details = append(details, Year, director, cast)
+	moviedb[title] = details
+	reply := &movieapi.Status{}
+	reply.Code = "Success"
 	return reply, nil
 
 }

@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ketemas/CloudNativeCourse/tree/main/lab5/movieapi"
+	"lab6/lab5/movieapi"
 	"google.golang.org/grpc"
 )
 
@@ -38,4 +38,27 @@ func main() {
 		log.Fatalf("could not get movie info: %v", err)
 	}
 	log.Printf("Movie Info for %s %d %s %v", title, r.GetYear(), r.GetDirector(), r.GetCast())
+	cancel()
+
+	// Adding new movie details to database
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	r2, err := c.SetMovieInfo(ctx, &movieapi.MessageData{
+		Title:    "Avengers: Endgame",
+		Year:     2019,
+		Director: "Russo Brothers",
+		Cast:     []string{"Chris Evans, Chris Hemsworth, RDJ, etc."}})
+	if err != nil {
+		log.Fatalf("Couldn't add movie info %s", err)
+	}
+	log.Printf("Addition of the Movie to the Datase was %s \n", r2.Code)
+	cancel()
+
+	// Trying to retrieve the details of the new movie added
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	r, err = c.GetMovieInfo(ctx, &movieapi.MovieRequest{Title: "Avengers: Endgame"})
+	if err != nil {
+		log.Fatalf("Couldn't get movie info: %v", err)
+	}
+	log.Printf("Movie Info for Avengers: Endgame %d %s %v", r.GetYear(), r.GetDirector(), r.GetCast())
+	cancel()
 }
