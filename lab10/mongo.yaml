@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      run: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:registry
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+            ##  protocol: TCP
+
+
